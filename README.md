@@ -1,4 +1,5 @@
 # DBMS-Final-Project
+# You can import the sweetify.sql file to phpmyadmin for run the full project.
 CREATE DATABASE Sweetify;
 USE Sweetify;
 
