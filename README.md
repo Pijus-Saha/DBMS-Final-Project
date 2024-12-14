@@ -1,12 +1,8 @@
 # DBMS-Final-Project
-# Please open Sweetify.sql file for run this code properly. Import the sql file to phpmyadmin.
---An E-commerce Database System for a Sweet Shop named Sweetify.
-
--- Create the e-commerce database
 CREATE DATABASE Sweetify;
 USE Sweetify;
 
--- Users table
+
 CREATE TABLE Users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(50),
@@ -18,14 +14,14 @@ CREATE TABLE Users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Categories table
+
 CREATE TABLE Categories (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
     category_name VARCHAR(100) UNIQUE,
     description TEXT
 );
 
--- Products table
+
 CREATE TABLE Products (
     product_id INT AUTO_INCREMENT PRIMARY KEY,
     product_name VARCHAR(100),
@@ -37,7 +33,7 @@ CREATE TABLE Products (
     FOREIGN KEY (category_id) REFERENCES Categories(category_id) ON DELETE CASCADE
 );
 
--- Orders table
+
 CREATE TABLE Orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
@@ -47,7 +43,7 @@ CREATE TABLE Orders (
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
 
--- Order Details table
+
 CREATE TABLE OrderDetails (
     order_detail_id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT,
@@ -58,7 +54,7 @@ CREATE TABLE OrderDetails (
     FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE CASCADE
 );
 
--- Cart table
+
 CREATE TABLE Cart (
     cart_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
@@ -69,7 +65,7 @@ CREATE TABLE Cart (
     FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE CASCADE
 );
 
--- Wishlist table
+
 CREATE TABLE Wishlist (
     wishlist_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
@@ -79,7 +75,7 @@ CREATE TABLE Wishlist (
     FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE CASCADE
 );
 
--- Reviews table
+
 CREATE TABLE Reviews (
     review_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
@@ -91,7 +87,7 @@ CREATE TABLE Reviews (
     FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE CASCADE
 );
 
--- Inventory table
+
 CREATE TABLE Inventory (
     inventory_id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT,
@@ -100,7 +96,7 @@ CREATE TABLE Inventory (
     FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE CASCADE
 );
 
--- Payment table
+
 CREATE TABLE Payments (
     payment_id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT,
@@ -111,7 +107,7 @@ CREATE TABLE Payments (
     FOREIGN KEY (order_id) REFERENCES Orders(order_id) ON DELETE CASCADE
 );
 
--- Shipping table
+
 CREATE TABLE Shipping (
     shipping_id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT,
@@ -122,7 +118,7 @@ CREATE TABLE Shipping (
     FOREIGN KEY (order_id) REFERENCES Orders(order_id) ON DELETE CASCADE
 );
 
--- Admins table
+
 CREATE TABLE Admins (
     admin_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) UNIQUE,
@@ -133,7 +129,7 @@ CREATE TABLE Admins (
 
 
 
--- Discounts table
+
 CREATE TABLE Discounts (
     discount_id INT AUTO_INCREMENT PRIMARY KEY,
     discount_code VARCHAR(50) UNIQUE,
@@ -143,7 +139,7 @@ CREATE TABLE Discounts (
     valid_to DATE
 );
 
--- Product Discounts table
+
 CREATE TABLE ProductDiscounts (
     product_discount_id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT,
@@ -152,7 +148,7 @@ CREATE TABLE ProductDiscounts (
     FOREIGN KEY (discount_id) REFERENCES Discounts(discount_id) ON DELETE CASCADE
 );
 
--- Activity Logs table
+
 CREATE TABLE ActivityLogs (
     log_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
@@ -161,7 +157,7 @@ CREATE TABLE ActivityLogs (
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
 
--- Notifications table
+
 CREATE TABLE Notifications (
     notification_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
@@ -171,7 +167,7 @@ CREATE TABLE Notifications (
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
 
--- Subscriptions table
+
 CREATE TABLE Subscriptions (
     subscription_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
@@ -182,7 +178,7 @@ CREATE TABLE Subscriptions (
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
 
--- Support Tickets table
+
 CREATE TABLE SupportTickets (
     ticket_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
@@ -193,7 +189,7 @@ CREATE TABLE SupportTickets (
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
 
--- Vendor table
+
 CREATE TABLE Vendors (
     vendor_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100),
@@ -203,7 +199,7 @@ CREATE TABLE Vendors (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Vendor Products table
+
 CREATE TABLE VendorProducts (
     vendor_product_id INT AUTO_INCREMENT PRIMARY KEY,
     vendor_id INT,
@@ -214,7 +210,7 @@ CREATE TABLE VendorProducts (
     FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE CASCADE
 );
 
--- Views
+
 CREATE VIEW ActiveUsers AS
 SELECT user_id, first_name, last_name, email, created_at
 FROM Users
@@ -245,7 +241,7 @@ FROM SupportTickets st
 JOIN Users u ON st.user_id = u.user_id
 WHERE st.status = 'Open';
 
--- Triggers
+
 DELIMITER //
 CREATE TRIGGER UpdateInventoryAfterOrder
 AFTER INSERT ON OrderDetails
@@ -277,7 +273,7 @@ END //
 
 DELIMITER //
 
--- Trigger to validate stock before placing an order
+
 CREATE TRIGGER ValidateStockBeforeOrder
 BEFORE INSERT ON OrderDetails
 FOR EACH ROW
@@ -290,7 +286,7 @@ BEGIN
     END IF;
 END //
 
--- Trigger to auto-update shipping date on status change to 'Shipped'
+
 CREATE TRIGGER SetShippingDate
 AFTER UPDATE ON Orders
 FOR EACH ROW
@@ -302,7 +298,7 @@ BEGIN
     END IF;
 END //
 
--- Trigger to log user registration in ActivityLogs
+
 CREATE TRIGGER LogUserRegistration
 AFTER INSERT ON Users
 FOR EACH ROW
@@ -311,7 +307,7 @@ BEGIN
     VALUES (NEW.user_id, 'User registered.', NOW());
 END //
 
--- Trigger to update vendor product stock after inventory update
+
 CREATE TRIGGER UpdateVendorStock
 AFTER UPDATE ON Inventory
 FOR EACH ROW
@@ -321,7 +317,7 @@ BEGIN
     WHERE product_id = NEW.product_id;
 END //
 
--- Trigger to calculate and update order total after inserting order details
+
 CREATE TRIGGER CalculateOrderTotal
 AFTER INSERT ON OrderDetails
 FOR EACH ROW
@@ -338,8 +334,6 @@ END //
 DELIMITER ;
 
 
-
---User Data
 INSERT INTO Users (first_name, last_name, email, password_hash, phone_number, address) VALUES
 ('Rahim', 'Ahmed', 'rahim.ahmed@example.com', 'hashed_pw1', '01711111111', 'Dhaka'),
 ('Karim', 'Hossain', 'karim.hossain@example.com', 'hashed_pw2', '01722222222', 'Chattogram'),
