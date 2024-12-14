@@ -1,4 +1,5 @@
 # DBMS-Final-Project
+# Please open Sweetify.sql file for run this code properly.
 --An E-commerce Database System for a Sweet Shop named Sweetify.
 
 -- Create the e-commerce database
