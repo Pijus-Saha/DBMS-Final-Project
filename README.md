@@ -1,5 +1,5 @@
 # DBMS-Final-Project
-# Please open Sweetify.sql file for run this code properly.
+# Please open Sweetify.sql file for run this code properly. Import the sql file to phpmyadmin.
 --An E-commerce Database System for a Sweet Shop named Sweetify.
 
 -- Create the e-commerce database
